@@ -22,6 +22,7 @@ import { cn } from "@/lib/utils";
 import { MagnetButton } from "@/components/MagnetButton";
 import { Button } from "@/components/ui/button";
 import { AuthModal } from "@/components/AuthModal";
+import { UserAvatar } from "@/components/UserAvatar";
 import { useAuth } from "@/lib/useAuth";
 
 const NAV_LINKS = [
@@ -212,7 +213,7 @@ export function Navbar() {
                   onClick={() => setProfileOpen((v) => !v)}
                   className="flex items-center gap-2 rounded-full border border-slate-200 bg-white py-1 pl-1 pr-2 shadow-sm transition-colors hover:bg-slate-50"
                 >
-                  <Avatar src={user?.photo} name={user?.name} email={user?.email} className="h-8 w-8 text-xs" />
+                  <UserAvatar src={user?.photo} name={user?.name} email={user?.email} className="h-8 w-8 text-xs" />
                   <span className="hidden text-sm font-medium text-slate-700 sm:block">{firstName}</span>
                   <ChevronDown
                     className={cn("h-4 w-4 text-slate-400 transition-transform", profileOpen && "rotate-180")}
@@ -230,7 +231,7 @@ export function Navbar() {
                     >
                       {/* User info header */}
                       <div className="flex items-center gap-3 rounded-2xl bg-slate-50/80 p-3">
-                        <Avatar src={user?.photo} name={user?.name} email={user?.email} className="h-10 w-10 text-sm" />
+                        <UserAvatar src={user?.photo} name={user?.name} email={user?.email} className="h-10 w-10 text-sm" />
                         <div className="min-w-0">
                           <p className="truncate text-sm font-semibold text-slate-900">{fullName}</p>
                           <p className="truncate text-xs text-slate-500">{user?.email}</p>
@@ -385,36 +386,6 @@ export function Navbar() {
 }
 
 /* ─────────────────── Small building blocks ─────────────────── */
-function Avatar({
-  src,
-  name,
-  email,
-  className,
-}: {
-  src?: string | null;
-  name?: string | null;
-  email?: string;
-  className?: string;
-}) {
-  if (src) {
-    return (
-      // eslint-disable-next-line @next/next/no-img-element
-      <img src={src} alt={name ?? "User"} className={cn("rounded-full object-cover", className)} />
-    );
-  }
-  const ch = (name ?? email ?? "U").charAt(0).toUpperCase();
-  return (
-    <span
-      className={cn(
-        "grid place-items-center rounded-full bg-gradient-to-br from-primary to-accent font-semibold text-white",
-        className
-      )}
-    >
-      {ch}
-    </span>
-  );
-}
-
 function DropdownItem({
   icon,
   label,
