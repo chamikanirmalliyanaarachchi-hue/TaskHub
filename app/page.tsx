@@ -1,6 +1,7 @@
 "use client";
 
 import * as React from "react";
+import Link from "next/link";
 import { motion } from "framer-motion";
 import {
   Search,
@@ -10,6 +11,7 @@ import {
   Star,
   Quote,
   ArrowRight,
+  Sparkles,
 } from "lucide-react";
 import { Navbar } from "@/components/Navbar";
 import { HeroSection } from "@/components/HeroSection";
@@ -217,9 +219,56 @@ export default function Home() {
       <EarnWithTaskHubStable />
 
       {/* Footer */}
-      <footer className="border-t border-slate-100 py-10 text-center text-sm text-slate-400">
-        © {new Date().getFullYear()} TaskHub 2.0 — A futuristic local
-        marketplace concept. Built with Next.js, Tailwind & Framer Motion.
+      <footer className="border-t border-slate-100 bg-white/60">
+        <div className="mx-auto max-w-7xl px-4 py-14 sm:px-6">
+          <div className="grid gap-10 md:grid-cols-2 lg:grid-cols-5">
+            <div className="lg:col-span-2">
+              <div className="flex items-center gap-2">
+                <span className="grid h-9 w-9 place-items-center rounded-xl bg-gradient-to-br from-primary to-accent text-white shadow-glow">
+                  <Sparkles className="h-5 w-5" />
+                </span>
+                <span className="font-display text-lg font-bold">TaskHub</span>
+              </div>
+              <p className="mt-4 max-w-xs text-sm text-slate-500">
+                Book vetted local Taskers in minutes, or earn on your own
+                schedule. A modern marketplace concept built for speed.
+              </p>
+            </div>
+
+            <div>
+              <h4 className="text-sm font-semibold text-slate-900">Customers</h4>
+              <ul className="mt-4 space-y-2 text-sm text-slate-500">
+                <li><Link href="/#how" className="transition-colors hover:text-primary">How it works</Link></li>
+                <li><Link href="/#services" className="transition-colors hover:text-primary">Browse categories</Link></li>
+                <li><Link href="/#taskers" className="transition-colors hover:text-primary">Top Taskers</Link></li>
+                <li><Link href="/#reviews" className="transition-colors hover:text-primary">Reviews</Link></li>
+              </ul>
+            </div>
+
+            <div>
+              <h4 className="text-sm font-semibold text-slate-900">Taskers</h4>
+              <ul className="mt-4 space-y-2 text-sm text-slate-500">
+                <li><Link href="/become-a-tasker" className="transition-colors hover:text-primary">Become a Tasker</Link></li>
+                <li><Link href="/tasker/dashboard" className="transition-colors hover:text-primary">Dashboard</Link></li>
+                <li><Link href="/become-a-tasker/setup" className="transition-colors hover:text-primary">Set up profile</Link></li>
+              </ul>
+            </div>
+
+            <div>
+              <h4 className="text-sm font-semibold text-slate-900">Company</h4>
+              <ul className="mt-4 space-y-2 text-sm text-slate-500">
+                <li><span className="cursor-default">About</span></li>
+                <li><span className="cursor-default">Careers</span></li>
+                <li><span className="cursor-default">Contact</span></li>
+              </ul>
+            </div>
+          </div>
+
+          <div className="mt-10 flex flex-col items-center justify-between gap-3 border-t border-slate-100 pt-6 text-xs text-slate-400 sm:flex-row">
+            <p>© {new Date().getFullYear()} TaskHub 2.0 — a local marketplace concept.</p>
+            <p>Built with Next.js, Tailwind &amp; Framer Motion.</p>
+          </div>
+        </div>
       </footer>
     </main>
   );
