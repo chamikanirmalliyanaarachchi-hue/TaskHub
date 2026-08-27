@@ -1,7 +1,24 @@
 "use client";
 
 import { create } from "zustand";
-import { persist } from "zustand/middleware";
+import { persist, createJSONStorage, type StateStorage } from "zustand/middleware";
+
+/**
+ * SSR-safe storage: on the server `localStorage` doesn't exist, so we fall
+ * back to a no-op store. This prevents `localStorage is not defined` crashes
+ * during `next build` static prerendering. On the client the real
+ * `localStorage` is used, and the dashboard's `mounted` guard avoids any
+ * hydration mismatch.
+ */
+const noopStorage: StateStorage = {
+  getItem: () => null,
+  setItem: () => {},
+  removeItem: () => {},
+};
+
+const safeStorage = createJSONStorage(() =>
+  typeof window === "undefined" ? noopStorage : window.localStorage,
+);
 
 export type TaskerStatus = "live" | "offline";
 
@@ -38,6 +55,9 @@ export const useTaskerProfile = create<TaskerProfileState>()(
       setStatus: (s) =>
         set((st) => ({ profile: st.profile ? { ...st.profile, status: s } : st.profile })),
     }),
-    { name: "taskhub-tasker-profile" },
+    {
+      name: "taskhub-tasker-profile",
+      storage: safeStorage,
+    },
   ),
 );
