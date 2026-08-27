@@ -139,9 +139,9 @@ export function ProductPreview() {
                 <motion.div
                   initial={{ opacity: 0, y: 10 }}
                   animate={{ opacity: 1, y: 0 }}
-                  className="mt-5 flex items-center gap-3 rounded-2xl border border-primary/20 bg-primary/5 p-3"
+                  className="mt-5 flex items-center gap-3 rounded-2xl border border-primary/20 bg-primary/[0.04] p-3"
                 >
-                  <span className="grid h-10 w-10 place-items-center rounded-xl bg-gradient-to-br from-primary to-accent text-white shadow-glow">
+                  <span className="grid h-10 w-10 place-items-center rounded-xl bg-primary text-white shadow-glow">
                     <Zap className="h-5 w-5" />
                   </span>
                   <div className="text-sm">
@@ -190,9 +190,9 @@ export function ProductPreview() {
                 (t, i) => (
                   <div
                     key={i}
-                    className="flex items-center gap-3 rounded-2xl border border-slate-100 bg-white p-3 transition-shadow hover:shadow-md"
+                    className="flex items-center gap-3 rounded-2xl border border-slate-100 bg-white p-3 transition-all duration-200 hover:border-primary/30 hover:shadow-md"
                   >
-                    <span className="grid h-11 w-11 shrink-0 place-items-center rounded-full bg-gradient-to-br from-primary to-accent font-display text-sm font-bold text-white">
+                    <span className="grid h-11 w-11 shrink-0 place-items-center rounded-full bg-primary/10 font-display text-sm font-bold text-primary ring-1 ring-primary/20">
                       {t.name.charAt(0)}
                     </span>
                     <div className="min-w-0 flex-1">

@@ -118,11 +118,10 @@
            shadow-[0_12px_48px_rgba(0,0,0,0.18)];
   }
 
-  /* Animated gradient text (shimmering pan) */
+  /* Gradient text — static (no shimmer) for a premium, intentional feel. */
   .text-gradient {
     @apply bg-clip-text text-transparent
-           bg-gradient-to-r from-primary via-accent to-primary
-           bg-[length:200%_auto] animate-gradient;
+           bg-gradient-to-r from-primary to-accent;
   }
 
   /* Soft colored glow wrapper */

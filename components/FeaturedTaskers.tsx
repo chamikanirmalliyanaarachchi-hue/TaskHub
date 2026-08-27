@@ -43,7 +43,7 @@ export function FeaturedTaskers() {
           <Badge variant="glow" className="mb-3">
             <Wrench className="h-3.5 w-3.5" /> Top Taskers near you
           </Badge>
-          <h2 className="font-display text-3xl font-bold sm:text-4xl">
+          <h2 className="font-display text-3xl font-bold tracking-tight text-foreground sm:text-4xl">
             Trusted locals, ready to help
           </h2>
         </div>
@@ -62,20 +62,23 @@ export function FeaturedTaskers() {
             viewport={{ once: true, margin: "-60px" }}
             transition={{ delay: i * 0.06 }}
             whileHover={{ y: -6 }}
-            className="group relative flex flex-col rounded-3xl border border-slate-100 bg-white p-5 shadow-[0_8px_30px_rgba(15,23,42,0.06)] transition-shadow hover:shadow-[0_18px_50px_rgba(15,23,42,0.12)]"
+            className="group relative flex flex-col rounded-3xl border border-slate-100 bg-white p-5 shadow-[0_8px_30px_rgba(15,23,42,0.06)] transition-all duration-300 hover:border-primary/20 hover:shadow-[0_18px_50px_rgba(15,23,42,0.12)]"
           >
             {t.top && (
-              <span className="absolute -top-2 right-4 rounded-full bg-gradient-to-r from-primary to-accent px-2.5 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-white shadow-sm">
+              <span className="absolute -top-2 right-4 rounded-full bg-primary px-2.5 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-white shadow-sm">
                 Top rated
               </span>
             )}
 
             <div className="flex items-center gap-3">
-              <span className="grid h-12 w-12 shrink-0 place-items-center rounded-full bg-gradient-to-br from-primary to-accent font-display text-base font-bold text-white">
+              <span className="grid h-12 w-12 shrink-0 place-items-center rounded-full bg-primary/10 font-display text-base font-bold text-primary ring-1 ring-primary/20">
                 {t.name.charAt(0)}
               </span>
               <div className="min-w-0">
-                <p className="truncate font-semibold text-slate-900">{t.name}</p>
+                <div className="flex items-center gap-1.5">
+                  <p className="truncate font-semibold text-slate-900">{t.name}</p>
+                  <BadgeCheck className="h-4 w-4 shrink-0 text-primary" aria-label="Verified" />
+                </div>
                 <p className="truncate text-sm text-slate-500">{t.skill}</p>
               </div>
             </div>
@@ -93,8 +96,8 @@ export function FeaturedTaskers() {
               <span className="flex items-center gap-1">
                 <MapPin className="h-3.5 w-3.5" /> {t.distance}
               </span>
-              <span className="flex items-center gap-1">
-                <BadgeCheck className="h-3.5 w-3.5 text-primary" /> Verified
+              <span className="flex items-center gap-1 font-medium text-primary/80">
+                <BadgeCheck className="h-3.5 w-3.5" /> Verified
               </span>
             </div>
 
@@ -108,11 +111,13 @@ export function FeaturedTaskers() {
               </div>
               <span
                 className={
-                  "flex items-center gap-1 text-xs font-medium " +
-                  (t.available ? "text-emerald-600" : "text-slate-400")
+                  "flex items-center gap-1.5 rounded-full px-2.5 py-1 text-xs font-medium " +
+                  (t.available
+                    ? "bg-emerald-50 text-emerald-600"
+                    : "bg-slate-100 text-slate-400")
                 }
               >
-                <span className={"h-2 w-2 rounded-full " + (t.available ? "bg-emerald-500" : "bg-slate-300")} />
+                <span className={"h-1.5 w-1.5 rounded-full " + (t.available ? "bg-emerald-500" : "bg-slate-300")} />
                 {t.available ? "Available" : "Booked"}
               </span>
             </div>

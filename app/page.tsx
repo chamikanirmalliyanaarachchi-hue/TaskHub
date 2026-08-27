@@ -25,7 +25,7 @@ import { QuickSearchDrawer } from "@/components/QuickSearchDrawer";
 import { BookingModal } from "@/components/BookingModal";
 import { LiveActivityToast } from "@/components/LiveActivityToast";
 import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
+import { SectionHeading } from "@/components/SectionHeading";
 
 const reveal = {
   hidden: { opacity: 0, y: 28 },
@@ -96,22 +96,14 @@ export default function Home() {
 
       {/* How it works */}
       <section id="how" className="mx-auto max-w-7xl scroll-mt-24 px-4 py-20">
-        <motion.div
-          variants={reveal}
-          initial="hidden"
-          whileInView="show"
-          viewport={{ once: true, margin: "-80px" }}
-          className="mb-12 text-center"
-        >
-          <Badge variant="glow" className="mb-3">
-            <ShieldCheck className="h-3.5 w-3.5" /> How it works
-          </Badge>
-          <h2 className="font-display text-3xl font-bold sm:text-4xl">
-            From request to done in 4 steps
-          </h2>
-        </motion.div>
+        <SectionHeading
+          eyebrow="How it works"
+          icon={<ShieldCheck className="h-3.5 w-3.5" />}
+          title="From request to done in 4 steps"
+          description="A simple, transparent process — no phone calls, no haggling, no surprises."
+        />
 
-        <div className="flex flex-col gap-4 lg:flex-row lg:items-stretch">
+        <div className="mt-12 flex flex-col gap-4 lg:flex-row lg:items-stretch">
           {STEPS.map((s, i) => (
             <React.Fragment key={s.title}>
               <motion.div
@@ -121,25 +113,30 @@ export default function Home() {
                 viewport={{ once: true, margin: "-60px" }}
                 transition={{ delay: i * 0.08 }}
                 whileHover={{ y: -4 }}
-                className="group flex flex-1 flex-col rounded-3xl border border-slate-100 bg-white p-6 shadow-[0_8px_30px_rgba(15,23,42,0.06)] transition-shadow hover:shadow-[0_18px_50px_rgba(15,23,42,0.12)]"
+                className="group flex flex-1 flex-col rounded-3xl border border-slate-100 bg-white p-6 shadow-[0_8px_30px_rgba(15,23,42,0.06)] transition-all duration-300 hover:border-primary/20 hover:shadow-[0_18px_50px_rgba(15,23,42,0.12)]"
               >
                 <div className="flex items-center justify-between">
-                  <div className="grid h-12 w-12 place-items-center rounded-2xl bg-gradient-to-br from-primary to-accent text-white shadow-glow">
+                  <div className="grid h-12 w-12 place-items-center rounded-2xl bg-primary text-primary-foreground shadow-glow">
                     <s.icon className="h-6 w-6" />
                   </div>
                   <span className="font-display text-3xl font-bold text-slate-100 transition-colors group-hover:text-primary/30">
                     {i + 1}
                   </span>
                 </div>
-                <h3 className="mt-4 font-display text-lg font-bold">{s.title}</h3>
+                <h3 className="mt-4 font-display text-lg font-bold text-foreground">{s.title}</h3>
                 <p className="mt-2 text-sm text-muted-foreground">{s.text}</p>
               </motion.div>
               {i < STEPS.length - 1 && (
-                <div className="hidden items-center justify-center lg:flex">
-                  <div className="grid h-9 w-9 place-items-center rounded-full border border-slate-100 bg-white text-primary shadow-sm">
-                    <ArrowRight className="h-4 w-4" />
+                <>
+                  <div className="hidden items-center justify-center lg:flex">
+                    <div className="grid h-9 w-9 place-items-center rounded-full border border-slate-100 bg-white text-primary shadow-sm">
+                      <ArrowRight className="h-4 w-4" />
+                    </div>
                   </div>
-                </div>
+                  <div className="flex justify-center lg:hidden" aria-hidden>
+                    <ArrowRight className="h-4 w-4 rotate-90 text-slate-300" />
+                  </div>
+                </>
               )}
             </React.Fragment>
           ))}
@@ -148,22 +145,14 @@ export default function Home() {
 
       {/* Testimonials */}
       <section id="reviews" className="mx-auto max-w-7xl scroll-mt-24 px-4 py-20">
-        <motion.div
-          variants={reveal}
-          initial="hidden"
-          whileInView="show"
-          viewport={{ once: true, margin: "-80px" }}
-          className="mb-12 text-center"
-        >
-          <Badge variant="glow" className="mb-3">
-            <Star className="h-3.5 w-3.5" /> Loved locally
-          </Badge>
-          <h2 className="font-display text-3xl font-bold sm:text-4xl">
-            Trusted across the city
-          </h2>
-        </motion.div>
+        <SectionHeading
+          eyebrow="Loved locally"
+          icon={<Star className="h-3.5 w-3.5" />}
+          title="Trusted across the city"
+          description="Real stories from customers who booked a Tasker nearby."
+        />
 
-        <div className="grid gap-5 md:grid-cols-3">
+        <div className="mt-12 grid gap-5 md:grid-cols-3">
           {REVIEWS.map((r, i) => (
             <motion.div
               key={r.name}
@@ -172,34 +161,26 @@ export default function Home() {
               whileInView="show"
               viewport={{ once: true, margin: "-60px" }}
               transition={{ delay: i * 0.1 }}
-              className="group relative flex flex-col rounded-3xl border border-slate-100 bg-white p-6 shadow-[0_8px_30px_rgba(15,23,42,0.06)] transition-shadow hover:shadow-[0_18px_50px_rgba(15,23,42,0.12)]"
+              className="group relative flex flex-col rounded-3xl border border-slate-100 bg-white p-6 shadow-[0_8px_30px_rgba(15,23,42,0.06)] transition-all duration-300 hover:border-primary/20 hover:shadow-[0_18px_50px_rgba(15,23,42,0.12)]"
             >
-              <Quote className="absolute right-5 top-5 h-8 w-8 text-primary/20" />
-              {/* Animated star rating */}
+              <Quote className="absolute right-5 top-5 h-8 w-8 text-primary/15" />
               <div className="flex gap-1">
                 {Array.from({ length: 5 }).map((_, idx) => (
-                  <motion.span
+                  <Star
                     key={idx}
-                    initial={{ scale: 0, opacity: 0 }}
-                    whileInView={{ scale: 1, opacity: 1 }}
-                    viewport={{ once: true }}
-                    transition={{ delay: 0.2 + idx * 0.08, type: "spring" }}
-                  >
-                    <Star
-                      className={
-                        idx < r.rating
-                          ? "h-4 w-4 fill-amber-400 text-amber-400"
-                          : "h-4 w-4 text-muted-foreground/40"
-                      }
-                    />
-                  </motion.span>
+                    className={
+                      idx < r.rating
+                        ? "h-4 w-4 fill-amber-400 text-amber-400"
+                        : "h-4 w-4 text-muted-foreground/30"
+                    }
+                  />
                 ))}
               </div>
               <p className="mt-4 text-sm leading-relaxed text-foreground/90">
                 “{r.text}”
               </p>
               <div className="mt-5 flex items-center gap-3">
-                <div className="grid h-10 w-10 place-items-center rounded-full bg-gradient-to-br from-primary to-accent font-display font-bold text-white">
+                <div className="grid h-10 w-10 place-items-center rounded-full bg-primary/10 font-display font-bold text-primary ring-1 ring-primary/20">
                   {r.name.charAt(0)}
                 </div>
                 <div>

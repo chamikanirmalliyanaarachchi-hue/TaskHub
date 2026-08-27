@@ -2,7 +2,7 @@
 
 import * as React from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Search, Sparkles, ArrowDown } from "lucide-react";
+import { Search, Sparkles } from "lucide-react";
 import { useAppStore } from "@/lib/store";
 import { KEYWORD_MAP } from "@/lib/constants";
 import { Button } from "@/components/ui/button";
@@ -68,7 +68,7 @@ export function HeroSection() {
   };
 
   return (
-    <section className="relative px-4 pb-16 pt-36 text-center sm:pt-44">
+    <section className="relative px-4 pb-14 pt-32 text-center sm:pb-16 sm:pt-40">
       <motion.div
         variants={container}
         initial="hidden"
@@ -77,7 +77,7 @@ export function HeroSection() {
       >
         <motion.span
           variants={word}
-          className="inline-flex items-center gap-2 rounded-full border border-white/40 bg-white/30 px-4 py-1.5 text-xs font-medium text-slate-600 shadow-glass-lg backdrop-blur-xl"
+          className="inline-flex items-center gap-2 rounded-full border border-white/50 bg-white/50 px-4 py-1.5 text-xs font-medium text-slate-600 shadow-sm backdrop-blur-xl"
         >
           <Sparkles className="h-3.5 w-3.5 text-primary" />
           AI-powered local Taskers, on demand
@@ -85,7 +85,7 @@ export function HeroSection() {
 
         <motion.h1
           variants={container}
-          className="mt-6 font-display text-4xl font-extrabold leading-tight tracking-tight text-slate-900 sm:text-6xl"
+          className="mt-6 font-display text-4xl font-extrabold leading-[1.1] tracking-tight text-slate-900 sm:text-5xl lg:text-6xl"
         >
           {HEADLINE.map((w, i) => (
             <motion.span
@@ -93,9 +93,7 @@ export function HeroSection() {
               variants={word}
               className={
                 "inline-block " +
-                (w.glow
-                  ? "text-gradient drop-shadow-[0_0_18px_hsl(var(--primary)/0.45)]"
-                  : "")
+                (w.glow ? "text-gradient" : "")
               }
               style={{ marginRight: "0.25em" }}
             >
@@ -119,7 +117,7 @@ export function HeroSection() {
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.6, type: "spring", stiffness: 120, damping: 18 }}
         onSubmit={submit}
-        className="mx-auto mt-9 flex max-w-2xl items-center gap-2 rounded-full border border-white/40 bg-white/30 p-2 pl-5 shadow-glass-lg backdrop-blur-xl"
+        className="mx-auto mt-9 flex max-w-2xl items-center gap-2 rounded-full border border-white/50 bg-white/60 p-2 pl-5 shadow-glass-lg backdrop-blur-xl"
       >
         <Search className="h-5 w-5 shrink-0 text-primary" />
         <input
@@ -132,7 +130,7 @@ export function HeroSection() {
           type="submit"
           variant="gradient"
           size="lg"
-          className="shrink-0 animate-pulse-glow"
+          className="shrink-0"
         >
           <Sparkles className="h-4 w-4" />
           <span className="hidden sm:inline">Ask AI</span>
@@ -158,22 +156,31 @@ export function HeroSection() {
         </AnimatePresence>
       </div>
 
-      {/* Scroll cue */}
-      <motion.button
+      {/* Secondary CTA — establishes hierarchy under the search */}
+      <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
-        transition={{ delay: 1 }}
-        onClick={() =>
-          document.getElementById("services")?.scrollIntoView({ behavior: "smooth" })
-        }
-        className="mx-auto mt-10 flex flex-col items-center gap-1 text-slate-400"
-        aria-label="Scroll to services"
+        transition={{ delay: 0.9 }}
+        className="mt-7 flex flex-wrap items-center justify-center gap-x-6 gap-y-2 text-sm"
       >
-        <span className="text-xs">Explore categories</span>
-        <motion.span animate={{ y: [0, 6, 0] }} transition={{ repeat: Infinity, duration: 1.6 }}>
-          <ArrowDown className="h-4 w-4" />
-        </motion.span>
-      </motion.button>
+        <button
+          onClick={() =>
+            document.getElementById("services")?.scrollIntoView({ behavior: "smooth" })
+          }
+          className="font-medium text-slate-500 transition-colors hover:text-slate-900"
+        >
+          Browse categories
+        </button>
+        <span className="hidden h-4 w-px bg-slate-200 sm:block" />
+        <button
+          onClick={() =>
+            document.getElementById("taskers")?.scrollIntoView({ behavior: "smooth" })
+          }
+          className="font-medium text-slate-500 transition-colors hover:text-slate-900"
+        >
+          Meet top Taskers
+        </button>
+      </motion.div>
     </section>
   );
 }

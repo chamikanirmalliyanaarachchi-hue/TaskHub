@@ -19,6 +19,7 @@ import { useAppStore } from "@/lib/store";
 import { CATEGORIES } from "@/lib/data";
 import { formatLKR, cn } from "@/lib/utils";
 import type { Service } from "@/lib/types";
+import { SectionHeading } from "@/components/SectionHeading";
 
 /**
  * CreativeCategories
@@ -72,17 +73,12 @@ export function CreativeCategories() {
 
   return (
     <section id="services" className="mx-auto max-w-6xl scroll-mt-24 px-4 py-20">
-      <div className="mb-10 text-center">
-        <span className="inline-flex items-center gap-1 rounded-full border border-white/40 bg-white/30 px-3 py-1 text-[11px] font-medium uppercase tracking-[0.18em] text-slate-500 backdrop-blur-xl">
-          <Zap className="h-3 w-3 text-primary" /> Explore
-        </span>
-        <h2 className="mt-3 font-display text-3xl font-semibold tracking-tight text-slate-900 sm:text-4xl">
-          Choose a <span className="text-gradient">category</span>
-        </h2>
-        <p className="mx-auto mt-2 max-w-md text-sm text-slate-500">
-          Tap any tile to instantly book a vetted Tasker near you.
-        </p>
-      </div>
+      <SectionHeading
+        eyebrow="Explore"
+        icon={<Zap className="h-3 w-3" />}
+        title={<>Choose a <span className="text-gradient">category</span></>}
+        description="Tap any tile to instantly book a vetted Tasker near you."
+      />
 
       {!services ? (
         <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4">
@@ -139,11 +135,11 @@ function CategoryCard({
 }) {
   const mx = useMotionValue(0);
   const my = useMotionValue(0);
-  const rx = useSpring(useTransform(my, [-0.5, 0.5], [12, -12]), {
+  const rx = useSpring(useTransform(my, [-0.5, 0.5], [8, -8]), {
     stiffness: 150,
     damping: 15,
   });
-  const ry = useSpring(useTransform(mx, [-0.5, 0.5], [-12, 12]), {
+  const ry = useSpring(useTransform(mx, [-0.5, 0.5], [-8, 8]), {
     stiffness: 150,
     damping: 15,
   });
@@ -166,14 +162,14 @@ function CategoryCard({
       transition={{ duration: 0.5, delay: (index % 4) * 0.06 }}
       className="[perspective:1000px]"
     >
-      <motion.div
-        onMouseMove={onMove}
-        onMouseLeave={reset}
-        whileHover={{ y: -8, scale: 1.02 }}
-        style={{ rotateX: rx, rotateY: ry, transformStyle: "preserve-3d" }}
-        onClick={onOpen}
-        className="group relative h-full cursor-pointer overflow-hidden rounded-3xl border border-white/40 bg-white/30 p-6 shadow-glass-lg backdrop-blur-xl"
-      >
+        <motion.div
+          onMouseMove={onMove}
+          onMouseLeave={reset}
+          whileHover={{ y: -8, scale: 1.02 }}
+          style={{ rotateX: rx, rotateY: ry, transformStyle: "preserve-3d" }}
+          onClick={onOpen}
+          className="group relative h-full cursor-pointer overflow-hidden rounded-3xl border border-white/40 bg-white/30 p-6 shadow-glass-lg backdrop-blur-xl transition-colors duration-300 hover:border-white/70"
+        >
         {/* Distinct pastel gradient wash */}
         <div className={cn("absolute inset-0 bg-gradient-to-br opacity-70", meta.pastel)} />
         <div className="pointer-events-none absolute -right-8 -top-8 h-28 w-28 rounded-full bg-white/40 blur-2xl" />
@@ -206,7 +202,7 @@ function CategoryCard({
 
           <span
             className={cn(
-              "mt-4 inline-flex items-center gap-1 text-sm font-medium opacity-0 transition-all duration-300 group-hover:opacity-100",
+              "mt-4 inline-flex items-center gap-1 text-sm font-medium transition-all duration-300",
               meta.accent
             )}
           >

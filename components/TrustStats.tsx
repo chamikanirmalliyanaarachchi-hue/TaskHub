@@ -4,6 +4,7 @@ import * as React from "react";
 import { motion } from "framer-motion";
 import { Star, CheckCircle2, Timer, Users } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
+import { SectionHeading } from "@/components/SectionHeading";
 
 const STATS = [
   { icon: Star, value: "4.9/5", label: "Average rating", sub: "from 3,200+ reviews" },
@@ -27,14 +28,11 @@ export function TrustStats() {
         viewport={{ once: true, margin: "-80px" }}
         className="overflow-hidden rounded-3xl border border-slate-100 bg-white p-8 shadow-[0_12px_40px_rgba(15,23,42,0.06)] sm:p-10"
       >
-        <div className="mb-8 text-center">
-          <Badge variant="glow" className="mb-3">
-            <Star className="h-3.5 w-3.5" /> Loved locally
-          </Badge>
-          <h2 className="font-display text-2xl font-bold sm:text-3xl">
-            A marketplace people actually trust
-          </h2>
-        </div>
+        <SectionHeading
+          eyebrow="Loved locally"
+          icon={<Star className="h-3.5 w-3.5" />}
+          title="A marketplace people actually trust"
+        />
 
         <div className="grid grid-cols-2 gap-6 lg:grid-cols-4">
           {STATS.map((s, i) => (
@@ -47,7 +45,7 @@ export function TrustStats() {
               transition={{ delay: i * 0.06 }}
               className="text-center"
             >
-              <span className="mx-auto grid h-11 w-11 place-items-center rounded-2xl bg-gradient-to-br from-primary/15 to-accent/15 text-primary">
+              <span className="mx-auto grid h-11 w-11 place-items-center rounded-2xl bg-primary/10 text-primary ring-1 ring-primary/10">
                 <s.icon className="h-5 w-5" />
               </span>
               <p className="mt-3 font-display text-2xl font-bold text-slate-900 sm:text-3xl">
