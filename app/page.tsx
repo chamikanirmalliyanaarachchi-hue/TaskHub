@@ -225,6 +225,7 @@ export default function Home() {
                 <li><Link href="/#how" className="transition-colors hover:text-primary">How it works</Link></li>
                 <li><Link href="/#services" className="transition-colors hover:text-primary">Browse categories</Link></li>
                 <li><Link href="/#taskers" className="transition-colors hover:text-primary">Top Taskers</Link></li>
+                <li><Link href="/tasks" className="transition-colors hover:text-primary">Task Manager</Link></li>
                 <li><Link href="/#reviews" className="transition-colors hover:text-primary">Reviews</Link></li>
               </ul>
             </div>

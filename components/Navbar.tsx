@@ -12,6 +12,7 @@ import {
   ChevronDown,
   Globe,
   LayoutDashboard,
+  ListTodo,
   Briefcase,
   Settings,
   LogOut,
@@ -29,6 +30,7 @@ const NAV_LINKS = [
   { label: "Services", href: "#services" },
   { label: "How it works", href: "#how" },
   { label: "Reviews", href: "#reviews" },
+  { label: "Tasks", href: "/tasks" },
   { label: "Become a Tasker", href: "#tasker" },
 ];
 
@@ -239,6 +241,12 @@ export function Navbar() {
                       </div>
 
                       <div className="mt-1 space-y-0.5">
+                        <DropdownItem
+                          icon={<ListTodo className="h-4 w-4" />}
+                          label="My Tasks"
+                          href="/tasks"
+                          onClick={() => setProfileOpen(false)}
+                        />
                         <DropdownItem
                           icon={<LayoutDashboard className="h-4 w-4" />}
                           label="Dashboard"
