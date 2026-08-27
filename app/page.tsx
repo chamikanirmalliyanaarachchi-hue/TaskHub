@@ -1,5 +1,6 @@
 "use client";
 
+import * as React from "react";
 import { motion } from "framer-motion";
 import {
   Search,
@@ -12,7 +13,10 @@ import {
 } from "lucide-react";
 import { Navbar } from "@/components/Navbar";
 import { HeroSection } from "@/components/HeroSection";
+import { ProductPreview } from "@/components/ProductPreview";
 import { CreativeCategories } from "@/components/CreativeCategories";
+import { FeaturedTaskers } from "@/components/FeaturedTaskers";
+import { TrustStats } from "@/components/TrustStats";
 import { EarnWithTaskHubStable } from "@/components/EarnWithTaskHubStable";
 import { MobileNavigation } from "@/components/MobileNavigation";
 import { QuickSearchDrawer } from "@/components/QuickSearchDrawer";
@@ -84,7 +88,9 @@ export default function Home() {
 
       {/* Hero + creative categories */}
       <HeroSection />
+      <ProductPreview />
       <CreativeCategories />
+      <FeaturedTaskers />
 
       {/* How it works */}
       <section id="how" className="mx-auto max-w-7xl scroll-mt-24 px-4 py-20">
@@ -103,23 +109,37 @@ export default function Home() {
           </h2>
         </motion.div>
 
-        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+        <div className="flex flex-col gap-4 lg:flex-row lg:items-stretch">
           {STEPS.map((s, i) => (
-            <motion.div
-              key={s.title}
-              variants={reveal}
-              initial="hidden"
-              whileInView="show"
-              viewport={{ once: true, margin: "-60px" }}
-              transition={{ delay: i * 0.08 }}
-              className="glass rounded-3xl p-6"
-            >
-              <div className="grid h-12 w-12 place-items-center rounded-2xl bg-gradient-to-br from-primary to-accent text-white shadow-lg glow">
-                <s.icon className="h-6 w-6" />
-              </div>
-              <h3 className="mt-4 font-display text-lg font-bold">{s.title}</h3>
-              <p className="mt-2 text-sm text-muted-foreground">{s.text}</p>
-            </motion.div>
+            <React.Fragment key={s.title}>
+              <motion.div
+                variants={reveal}
+                initial="hidden"
+                whileInView="show"
+                viewport={{ once: true, margin: "-60px" }}
+                transition={{ delay: i * 0.08 }}
+                whileHover={{ y: -4 }}
+                className="group flex flex-1 flex-col rounded-3xl border border-slate-100 bg-white p-6 shadow-[0_8px_30px_rgba(15,23,42,0.06)] transition-shadow hover:shadow-[0_18px_50px_rgba(15,23,42,0.12)]"
+              >
+                <div className="flex items-center justify-between">
+                  <div className="grid h-12 w-12 place-items-center rounded-2xl bg-gradient-to-br from-primary to-accent text-white shadow-glow">
+                    <s.icon className="h-6 w-6" />
+                  </div>
+                  <span className="font-display text-3xl font-bold text-slate-100 transition-colors group-hover:text-primary/30">
+                    {i + 1}
+                  </span>
+                </div>
+                <h3 className="mt-4 font-display text-lg font-bold">{s.title}</h3>
+                <p className="mt-2 text-sm text-muted-foreground">{s.text}</p>
+              </motion.div>
+              {i < STEPS.length - 1 && (
+                <div className="hidden items-center justify-center lg:flex">
+                  <div className="grid h-9 w-9 place-items-center rounded-full border border-slate-100 bg-white text-primary shadow-sm">
+                    <ArrowRight className="h-4 w-4" />
+                  </div>
+                </div>
+              )}
+            </React.Fragment>
           ))}
         </div>
       </section>
@@ -150,7 +170,7 @@ export default function Home() {
               whileInView="show"
               viewport={{ once: true, margin: "-60px" }}
               transition={{ delay: i * 0.1 }}
-              className="glass relative rounded-3xl p-6"
+              className="group relative flex flex-col rounded-3xl border border-slate-100 bg-white p-6 shadow-[0_8px_30px_rgba(15,23,42,0.06)] transition-shadow hover:shadow-[0_18px_50px_rgba(15,23,42,0.12)]"
             >
               <Quote className="absolute right-5 top-5 h-8 w-8 text-primary/20" />
               {/* Animated star rating */}
@@ -189,6 +209,9 @@ export default function Home() {
           ))}
         </div>
       </section>
+
+      {/* Trust / social proof */}
+      <TrustStats />
 
       {/* Become a Tasker CTA — stable container, flowing pastel gradient */}
       <EarnWithTaskHubStable />
