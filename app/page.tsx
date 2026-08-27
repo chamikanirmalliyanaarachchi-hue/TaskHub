@@ -67,13 +67,13 @@ const REVIEWS = [
   {
     name: "Ravi Perera",
     role: "Dehiwala",
-    text: "Fixed my leaking pipe the same day. Pricing was exactly what the app quoted — no surprises.",
+    text: "Fixed my leaking pipe the same day. The quote was exact — no hidden fees, no surprises.",
     rating: 5,
   },
   {
     name: "Nisha de Silva",
     role: "Colombo 05",
-    text: "The furniture assembly was spot on. Loved the live tracking and the glassy, modern app experience.",
+    text: "Furniture assembly was spot on. Everything was tidy afterwards and the whole job took under an hour.",
     rating: 4,
   },
 ];
@@ -95,7 +95,7 @@ export default function Home() {
       <FeaturedTaskers />
 
       {/* How it works */}
-      <section id="how" className="mx-auto max-w-7xl scroll-mt-24 px-4 py-20">
+      <section id="how" className="mx-auto max-w-7xl scroll-mt-24 px-4 py-20 sm:px-6">
         <SectionHeading
           eyebrow="How it works"
           icon={<ShieldCheck className="h-3.5 w-3.5" />}
@@ -144,7 +144,7 @@ export default function Home() {
       </section>
 
       {/* Testimonials */}
-      <section id="reviews" className="mx-auto max-w-7xl scroll-mt-24 px-4 py-20">
+      <section id="reviews" className="mx-auto max-w-7xl scroll-mt-24 px-4 py-20 sm:px-6">
         <SectionHeading
           eyebrow="Loved locally"
           icon={<Star className="h-3.5 w-3.5" />}
@@ -200,8 +200,8 @@ export default function Home() {
       <EarnWithTaskHubStable />
 
       {/* Footer */}
-      <footer className="border-t border-slate-100 bg-white/60">
-        <div className="mx-auto max-w-7xl px-4 py-14 sm:px-6">
+      <footer className="border-t border-slate-200 bg-white">
+        <div className="mx-auto max-w-7xl px-4 py-16 sm:px-6">
           <div className="grid gap-10 md:grid-cols-2 lg:grid-cols-5">
             <div className="lg:col-span-2">
               <div className="flex items-center gap-2">
@@ -210,15 +210,18 @@ export default function Home() {
                 </span>
                 <span className="font-display text-lg font-bold">TaskHub</span>
               </div>
-              <p className="mt-4 max-w-xs text-sm text-slate-500">
+              <p className="mt-4 max-w-xs text-sm leading-relaxed text-slate-500">
                 Book vetted local Taskers in minutes, or earn on your own
                 schedule. A modern marketplace concept built for speed.
               </p>
+              <Button asChild variant="gradient" size="sm" className="mt-6">
+                <Link href="/become-a-tasker">Become a Tasker</Link>
+              </Button>
             </div>
 
             <div>
               <h4 className="text-sm font-semibold text-slate-900">Customers</h4>
-              <ul className="mt-4 space-y-2 text-sm text-slate-500">
+              <ul className="mt-4 space-y-3 text-sm text-slate-500">
                 <li><Link href="/#how" className="transition-colors hover:text-primary">How it works</Link></li>
                 <li><Link href="/#services" className="transition-colors hover:text-primary">Browse categories</Link></li>
                 <li><Link href="/#taskers" className="transition-colors hover:text-primary">Top Taskers</Link></li>
@@ -228,7 +231,7 @@ export default function Home() {
 
             <div>
               <h4 className="text-sm font-semibold text-slate-900">Taskers</h4>
-              <ul className="mt-4 space-y-2 text-sm text-slate-500">
+              <ul className="mt-4 space-y-3 text-sm text-slate-500">
                 <li><Link href="/become-a-tasker" className="transition-colors hover:text-primary">Become a Tasker</Link></li>
                 <li><Link href="/tasker/dashboard" className="transition-colors hover:text-primary">Dashboard</Link></li>
                 <li><Link href="/become-a-tasker/setup" className="transition-colors hover:text-primary">Set up profile</Link></li>
@@ -237,15 +240,15 @@ export default function Home() {
 
             <div>
               <h4 className="text-sm font-semibold text-slate-900">Company</h4>
-              <ul className="mt-4 space-y-2 text-sm text-slate-500">
-                <li><span className="cursor-default">About</span></li>
-                <li><span className="cursor-default">Careers</span></li>
-                <li><span className="cursor-default">Contact</span></li>
+              <ul className="mt-4 space-y-3 text-sm text-slate-500">
+                <li><span className="cursor-default transition-colors hover:text-slate-700">About</span></li>
+                <li><span className="cursor-default transition-colors hover:text-slate-700">Careers</span></li>
+                <li><span className="cursor-default transition-colors hover:text-slate-700">Contact</span></li>
               </ul>
             </div>
           </div>
 
-          <div className="mt-10 flex flex-col items-center justify-between gap-3 border-t border-slate-100 pt-6 text-xs text-slate-400 sm:flex-row">
+          <div className="mt-12 flex flex-col items-center justify-between gap-3 border-t border-slate-100 pt-6 text-xs text-slate-400 sm:flex-row">
             <p>© {new Date().getFullYear()} TaskHub 2.0 — a local marketplace concept.</p>
             <p>Built with Next.js, Tailwind &amp; Framer Motion.</p>
           </div>

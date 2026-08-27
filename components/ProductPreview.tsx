@@ -81,7 +81,7 @@ export function ProductPreview() {
   };
 
   return (
-    <section className="relative mx-auto max-w-7xl px-4 pt-6 sm:px-6">
+    <section className="relative mx-auto max-w-7xl px-4 py-10 sm:px-6">
       <div className="grid items-center gap-6 lg:grid-cols-12">
         {/* AI matching demo */}
         <div className="lg:col-span-7">

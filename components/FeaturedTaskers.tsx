@@ -62,7 +62,7 @@ export function FeaturedTaskers() {
             viewport={{ once: true, margin: "-60px" }}
             transition={{ delay: i * 0.06 }}
             whileHover={{ y: -6 }}
-            className="group relative flex flex-col rounded-3xl border border-slate-100 bg-white p-5 shadow-[0_8px_30px_rgba(15,23,42,0.06)] transition-all duration-300 hover:border-primary/20 hover:shadow-[0_18px_50px_rgba(15,23,42,0.12)]"
+            className="group relative flex h-full flex-col rounded-3xl border border-slate-100 bg-white p-5 shadow-[0_8px_30px_rgba(15,23,42,0.06)] transition-all duration-300 hover:border-primary/20 hover:shadow-[0_18px_50px_rgba(15,23,42,0.12)]"
           >
             {t.top && (
               <span className="absolute -top-2 right-4 rounded-full bg-primary px-2.5 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-white shadow-sm">
@@ -122,7 +122,7 @@ export function FeaturedTaskers() {
               </span>
             </div>
 
-            <Button variant="gradient" size="sm" className="mt-4 w-full">
+            <Button variant="gradient" size="sm" className="mt-auto w-full">
               Book {t.name.split(" ")[0]} <ArrowRight className="h-4 w-4" />
             </Button>
           </motion.article>

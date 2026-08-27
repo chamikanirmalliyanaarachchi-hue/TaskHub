@@ -72,7 +72,7 @@ export function CreativeCategories() {
   const cats = CATEGORIES.filter((c) => c !== "All");
 
   return (
-    <section id="services" className="mx-auto max-w-6xl scroll-mt-24 px-4 py-20">
+    <section id="services" className="mx-auto max-w-6xl scroll-mt-24 px-4 py-20 sm:px-6">
       <SectionHeading
         eyebrow="Explore"
         icon={<Zap className="h-3 w-3" />}
@@ -166,6 +166,7 @@ function CategoryCard({
           onMouseMove={onMove}
           onMouseLeave={reset}
           whileHover={{ y: -8, scale: 1.02 }}
+          transition={{ duration: 0.3, ease: "easeOut" }}
           style={{ rotateX: rx, rotateY: ry, transformStyle: "preserve-3d" }}
           onClick={onOpen}
           className="group relative h-full cursor-pointer overflow-hidden rounded-3xl border border-white/40 bg-white/30 p-6 shadow-glass-lg backdrop-blur-xl transition-colors duration-300 hover:border-white/70"
@@ -187,15 +188,15 @@ function CategoryCard({
             <Icon className="h-7 w-7" />
           </motion.div>
 
-          <h3 className="mt-5 font-display text-lg font-semibold text-slate-900">
+          <h3 className="mt-5 font-display text-base font-semibold text-slate-900">
             {service?.name ?? cat}
           </h3>
-          <p className="mt-1 line-clamp-2 text-xs text-slate-500">
+          <p className="mt-1.5 min-h-[2.5rem] line-clamp-2 text-sm text-slate-500">
             {service?.description ?? `Book a ${cat.toLowerCase()} Tasker near you`}
           </p>
 
           {service && (
-            <p className="mt-3 text-xs text-slate-400">
+            <p className="mt-3 text-xs font-medium text-slate-400">
               From {formatLKR(service.hourlyRate)}/hr
             </p>
           )}
@@ -207,7 +208,7 @@ function CategoryCard({
             )}
           >
             Book now
-            <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
+            <ArrowRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />
           </span>
         </div>
       </motion.div>

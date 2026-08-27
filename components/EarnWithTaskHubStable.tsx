@@ -18,7 +18,7 @@ import { Button } from "@/components/ui/button";
  */
 export function EarnWithTaskHubStable() {
   return (
-    <section id="tasker" className="mx-auto max-w-7xl scroll-mt-24 px-4 pb-28">
+    <section id="tasker" className="mx-auto max-w-7xl scroll-mt-24 px-4 pb-20">
       {/* Stable container — do NOT animate this element's transform */}
       <div className="relative overflow-hidden rounded-3xl bg-white p-10 shadow-xl shadow-slate-200/60 sm:p-16">
         {/* Animated pastel gradient layer (background-position only) */}
