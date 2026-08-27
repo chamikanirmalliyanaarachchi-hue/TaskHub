@@ -11,36 +11,54 @@ import {
 import { getFirestore } from "firebase/firestore";
 
 /**
- * Standard Firebase v10 web config.
- * Values come from NEXT_PUBLIC_* env vars (see .env.local / .env.local.example).
- * These are safe to expose to the browser.
+ * Read NEXT_PUBLIC_* Firebase vars explicitly and trim them, so stray
+ * whitespace can never evaluate as a "present but empty" value.
  */
-const firebaseConfig: FirebaseOptions = {
-  apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY,
-  authDomain: process.env.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN,
-  projectId: process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID,
-  storageBucket: process.env.NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET,
-  messagingSenderId: process.env.NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID,
-  appId: process.env.NEXT_PUBLIC_FIREBASE_APP_ID,
-  measurementId: process.env.NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID,
+const env = {
+  apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY?.trim() || "",
+  authDomain: process.env.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN?.trim() || "",
+  projectId: process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID?.trim() || "",
+  storageBucket: process.env.NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET?.trim() || "",
+  messagingSenderId: process.env.NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID?.trim() || "",
+  appId: process.env.NEXT_PUBLIC_FIREBASE_APP_ID?.trim() || "",
+  measurementId: process.env.NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID?.trim() || "",
 };
 
-// Initialize exactly once (guarded for HMR / repeated imports).
-// Wrapped so a missing or invalid config logs an error instead of crashing
-// the app at import time — auth calls will then fail with a clear message.
+const firebaseConfig: FirebaseOptions = { ...env };
+
+/** Keys that are mandatory for Firebase Auth to function. */
+const REQUIRED_KEYS: (keyof typeof env)[] = [
+  "apiKey",
+  "authDomain",
+  "projectId",
+  "appId",
+];
+
+/**
+ * Accurate, single-source detection: true only when every required public
+ * config value is actually present. If this is false, auth will be null and
+ * the helpers throw a clear error (never a false positive).
+ */
+export const isFirebaseConfigured = REQUIRED_KEYS.every((k) => Boolean(env[k]));
+
 let app: ReturnType<typeof initializeApp> | null = null;
 let auth: ReturnType<typeof getAuth> | null = null;
 let db: ReturnType<typeof getFirestore> | null = null;
 let googleProvider: GoogleAuthProvider | null = null;
 
-try {
-  app = getApps().length ? getApp() : initializeApp(firebaseConfig);
-  auth = getAuth(app);
-  db = getFirestore(app);
-  googleProvider = new GoogleAuthProvider();
-  googleProvider.setCustomParameters({ prompt: "select_account" });
-} catch (err) {
-  console.error("[firebase] initialization failed:", err);
+// Only initialize when configured, so we never call initializeApp/getAuth
+// with undefined values (which would throw and leave auth null).
+if (isFirebaseConfigured) {
+  try {
+    app = getApps().length ? getApp() : initializeApp(firebaseConfig);
+    auth = getAuth(app);
+    db = getFirestore(app);
+    googleProvider = new GoogleAuthProvider();
+    googleProvider.setCustomParameters({ prompt: "select_account" });
+  } catch (err) {
+    // A genuine init failure (e.g. invalid apiKey) — surface it; do not mask.
+    console.error("[firebase] initialization failed:", err);
+  }
 }
 
 export { app, auth, db, googleProvider };
