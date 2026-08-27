@@ -34,12 +34,26 @@ const REQUIRED_KEYS: (keyof typeof env)[] = [
   "appId",
 ];
 
+/** Exact NEXT_PUBLIC_* env var names that are missing/empty at build time. */
+export const missingFirebaseKeys = REQUIRED_KEYS.filter((k) => !env[k]).map(
+  (k) => `NEXT_PUBLIC_FIREBASE_${String(k).toUpperCase()}`
+);
+
 /**
  * Accurate, single-source detection: true only when every required public
  * config value is actually present. If this is false, auth will be null and
  * the helpers throw a clear error (never a false positive).
  */
-export const isFirebaseConfigured = REQUIRED_KEYS.every((k) => Boolean(env[k]));
+export const isFirebaseConfigured = missingFirebaseKeys.length === 0;
+
+if (!isFirebaseConfigured) {
+  // Names the exact missing var in the Vercel build logs so it's obvious
+  // this is a build-time env gap (set the var + redeploy), not a code bug.
+  console.error(
+    "[firebase] Missing required env vars at build time:",
+    missingFirebaseKeys.join(", ")
+  );
+}
 
 let app: ReturnType<typeof initializeApp> | null = null;
 let auth: ReturnType<typeof getAuth> | null = null;
