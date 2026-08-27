@@ -2,7 +2,7 @@
 
 import { create } from "zustand";
 import { onAuthStateChanged, type User } from "firebase/auth";
-import { auth, signInWithGoogle, logOut } from "@/lib/firebase";
+import { auth, ensureFirebase, signInWithGoogle, logOut } from "@/lib/firebase";
 
 /**
  * Auth state backed by real Firebase Auth (via `onAuthStateChanged`).
@@ -37,19 +37,27 @@ export const useAuth = create<AuthState>((set) => ({
 }));
 
 // Subscribe to Firebase auth changes (client only) to keep the store in sync.
-if (typeof window !== "undefined" && auth) {
-  onAuthStateChanged(auth, (fbUser: User | null) => {
-    if (fbUser) {
-      useAuth.setState({
-        isLoggedIn: true,
-        user: {
-          email: fbUser.email ?? "",
-          name: fbUser.displayName,
-          photo: fbUser.photoURL,
-        },
+// Bootstrap via ensureFirebase() so the listener attaches even when the app
+// was initialized from the runtime config endpoint (not build-time inlining).
+let subscribed = false;
+if (typeof window !== "undefined") {
+  ensureFirebase().then(() => {
+    if (auth && !subscribed) {
+      subscribed = true;
+      onAuthStateChanged(auth, (fbUser: User | null) => {
+        if (fbUser) {
+          useAuth.setState({
+            isLoggedIn: true,
+            user: {
+              email: fbUser.email ?? "",
+              name: fbUser.displayName,
+              photo: fbUser.photoURL,
+            },
+          });
+        } else {
+          useAuth.setState({ isLoggedIn: false, user: null });
+        }
       });
-    } else {
-      useAuth.setState({ isLoggedIn: false, user: null });
     }
   });
 }

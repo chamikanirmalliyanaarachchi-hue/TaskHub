@@ -26,33 +26,16 @@ const env = {
 
 const firebaseConfig: FirebaseOptions = { ...env };
 
-/** Keys that are mandatory for Firebase Auth to function. */
-const REQUIRED_KEYS: (keyof typeof env)[] = [
-  "apiKey",
-  "authDomain",
-  "projectId",
-  "appId",
-];
-
-/** Exact NEXT_PUBLIC_* env var names that are missing/empty at build time. */
+const REQUIRED_KEYS: (keyof typeof env)[] = ["apiKey", "authDomain", "projectId", "appId"];
 export const missingFirebaseKeys = REQUIRED_KEYS.filter((k) => !env[k]).map(
   (k) => `NEXT_PUBLIC_FIREBASE_${String(k).toUpperCase()}`
 );
-
-/**
- * Accurate, single-source detection: true only when every required public
- * config value is actually present. If this is false, auth will be null and
- * the helpers throw a clear error (never a false positive).
- */
 export const isFirebaseConfigured = missingFirebaseKeys.length === 0;
 
 if (!isFirebaseConfigured) {
-  // Names the exact missing var in the Vercel build logs so it's obvious
-  // this is a build-time env gap (set the var + redeploy), not a code bug.
-  console.error(
-    "[firebase] Missing required env vars at build time:",
-    missingFirebaseKeys.join(", ")
-  );
+  // Names the exact missing var in the deploy logs — confirms a build-time env
+  // gap (set the var) rather than a code bug.
+  console.error("[firebase] Missing build-time env vars:", missingFirebaseKeys.join(", "));
 }
 
 let app: ReturnType<typeof initializeApp> | null = null;
@@ -60,8 +43,7 @@ let auth: ReturnType<typeof getAuth> | null = null;
 let db: ReturnType<typeof getFirestore> | null = null;
 let googleProvider: GoogleAuthProvider | null = null;
 
-// Only initialize when configured, so we never call initializeApp/getAuth
-// with undefined values (which would throw and leave auth null).
+// Fast path: build-time NEXT_PUBLIC_* were inlined → initialize immediately.
 if (isFirebaseConfigured) {
   try {
     app = getApps().length ? getApp() : initializeApp(firebaseConfig);
@@ -70,9 +52,38 @@ if (isFirebaseConfigured) {
     googleProvider = new GoogleAuthProvider();
     googleProvider.setCustomParameters({ prompt: "select_account" });
   } catch (err) {
-    // A genuine init failure (e.g. invalid apiKey) — surface it; do not mask.
     console.error("[firebase] initialization failed:", err);
   }
+}
+
+/**
+ * Resilient bootstrap. If the build didn't inline NEXT_PUBLIC_* (e.g. the vars
+ * were added in Vercel after the last deploy), fetch the config from the
+ * runtime API route (which reads live server env). This removes the hard
+ * dependency on build-time inlining, so auth works without a redeploy.
+ */
+let initPromise: Promise<void> | null = null;
+export function ensureFirebase(): Promise<void> {
+  if (auth) return Promise.resolve();
+  if (initPromise) return initPromise;
+  initPromise = (async () => {
+    try {
+      const res = await fetch("/api/firebase-config");
+      if (!res.ok) return;
+      const cfg = (await res.json()) as FirebaseOptions;
+      const required: (keyof FirebaseOptions)[] = ["apiKey", "authDomain", "projectId", "appId"];
+      if (!required.every((k) => Boolean(cfg[k]))) return;
+      if (!getApps().length) initializeApp(cfg);
+      app = getApp();
+      auth = getAuth(app);
+      db = getFirestore(app);
+      googleProvider = new GoogleAuthProvider();
+      googleProvider.setCustomParameters({ prompt: "select_account" });
+    } catch (err) {
+      console.error("[firebase] runtime init failed:", err);
+    }
+  })();
+  return initPromise;
 }
 
 export { app, auth, db, googleProvider };
@@ -82,6 +93,7 @@ export { app, auth, db, googleProvider };
 /* ------------------------------------------------------------------ */
 
 export async function signInWithGoogle(): Promise<User> {
+  await ensureFirebase();
   if (!auth || !googleProvider) {
     throw new Error("Firebase is not configured. Check your NEXT_PUBLIC_FIREBASE_* env vars.");
   }
@@ -90,18 +102,21 @@ export async function signInWithGoogle(): Promise<User> {
 }
 
 export async function signInWithEmail(email: string, password: string): Promise<User> {
+  await ensureFirebase();
   if (!auth) throw new Error("Firebase is not configured.");
   const result = await signInWithEmailAndPassword(auth, email, password);
   return result.user;
 }
 
 export async function signUpWithEmail(email: string, password: string): Promise<User> {
+  await ensureFirebase();
   if (!auth) throw new Error("Firebase is not configured.");
   const result = await createUserWithEmailAndPassword(auth, email, password);
   return result.user;
 }
 
 export async function logOut(): Promise<void> {
+  await ensureFirebase();
   if (!auth) return;
   await signOut(auth);
 }
