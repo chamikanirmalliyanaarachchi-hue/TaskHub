@@ -2,13 +2,11 @@
 
 import * as React from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { X, Mail, Lock, User as UserIcon, Apple, Zap, AlertCircle, Settings2 } from "lucide-react";
+import { X, Mail, Lock, User as UserIcon, Apple, Zap, AlertCircle } from "lucide-react";
 import {
   signInWithGoogle,
   signInWithEmail,
   signUpWithEmail,
-  isFirebaseConfigured,
-  missingFirebaseKeys,
 } from "@/lib/firebase";
 
 /**
@@ -127,25 +125,21 @@ export function AuthModal({
               <span className="text-gradient">TaskHub</span>
             </div>
 
-            {/* Configured → full auth UI. Unconfigured → setup helper. */}
-            {isFirebaseConfigured ? (
-              <ConfiguredView
-                tab={tab}
-                setTab={setTab}
-                email={email}
-                setEmail={setEmail}
-                password={password}
-                setPassword={setPassword}
-                name={name}
-                setName={setName}
-                loading={loading}
-                error={error}
-                onGoogle={handleGoogle}
-                onSubmit={handleSubmit}
-              />
-            ) : (
-              <ConfigHelper missing={missingFirebaseKeys} />
-            )}
+            {/* Full auth UI (Firebase is initialized in lib/firebase.ts) */}
+            <ConfiguredView
+              tab={tab}
+              setTab={setTab}
+              email={email}
+              setEmail={setEmail}
+              password={password}
+              setPassword={setPassword}
+              name={name}
+              setName={setName}
+              loading={loading}
+              error={error}
+              onGoogle={handleGoogle}
+              onSubmit={handleSubmit}
+            />
           </motion.div>
         </div>
       )}
@@ -284,55 +278,6 @@ function ConfiguredView({
         By continuing you agree to our Terms & Privacy Policy.
       </p>
     </>
-  );
-}
-
-/* ─────────────────── Setup helper (unconfigured) ─────────────────── */
-function ConfigHelper({ missing }: { missing: string[] }) {
-  return (
-    <div className="mt-4">
-      <div className="flex items-start gap-3 rounded-2xl bg-amber-50 p-4 text-amber-700">
-        <Settings2 className="mt-0.5 h-5 w-5 shrink-0" />
-        <div>
-          <p className="text-sm font-semibold">Firebase setup required</p>
-          <p className="mt-1 text-sm">
-            Authentication is disabled because these env vars are missing:
-          </p>
-          <ul className="mt-2 list-inside list-disc text-sm">
-            {missing.map((k) => (
-              <li key={k} className="font-mono text-xs">
-                {k}
-              </li>
-            ))}
-          </ul>
-        </div>
-      </div>
-
-      <ol className="mt-5 space-y-3 text-sm text-slate-600">
-        <li>
-          <span className="font-semibold text-slate-900">1.</span> In your project root, create a file
-          named <code className="rounded bg-slate-100 px-1.5 py-0.5 font-mono text-xs">.env.local</code>.
-        </li>
-        <li>
-          <span className="font-semibold text-slate-900">2.</span> Paste your Firebase Web credentials:
-        </li>
-      </ol>
-
-      <pre className="mt-3 overflow-x-auto rounded-2xl bg-slate-900 p-4 text-xs leading-relaxed text-slate-100">
-{`NEXT_PUBLIC_FIREBASE_API_KEY=your_api_key
-NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN=your-project.firebaseapp.com
-NEXT_PUBLIC_FIREBASE_PROJECT_ID=your-project-id
-NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET=your-project.appspot.com
-NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID=1234567890
-NEXT_PUBLIC_FIREBASE_APP_ID=1:1234567890:web:abc123`}
-      </pre>
-
-      <p className="mt-4 text-xs text-slate-500">
-        Get these from <span className="font-medium">Firebase Console → Project settings → Your apps
-        (Web)</span>. Then restart the dev server (<code className="rounded bg-slate-100 px-1.5 py-0.5 font-mono">npm run dev</code>)
-        and this modal will switch to live Google / email sign-in.
-      </p>
-    </div>
   );
 }
 

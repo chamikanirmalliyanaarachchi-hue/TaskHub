@@ -11,69 +11,39 @@ import {
 import { getFirestore } from "firebase/firestore";
 
 /**
- * Firebase web config read from NEXT_PUBLIC_* env vars (client-safe).
- * Copy `.env.local.example` → `.env.local` and fill from:
- * Firebase Console → Project settings → Your apps (Web).
+ * Standard Firebase v10 web config.
+ * Values come from NEXT_PUBLIC_* env vars (see .env.local / .env.local.example).
+ * These are safe to expose to the browser.
  */
 const firebaseConfig: FirebaseOptions = {
-  apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY?.trim() || undefined,
-  authDomain: process.env.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN?.trim() || undefined,
-  projectId: process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID?.trim() || undefined,
-  storageBucket: process.env.NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET?.trim() || undefined,
-  messagingSenderId: process.env.NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID?.trim() || undefined,
-  appId: process.env.NEXT_PUBLIC_FIREBASE_APP_ID?.trim() || undefined,
-  measurementId: process.env.NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID?.trim() || undefined,
+  apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY,
+  authDomain: process.env.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN,
+  projectId: process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID,
+  storageBucket: process.env.NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET,
+  messagingSenderId: process.env.NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID,
+  appId: process.env.NEXT_PUBLIC_FIREBASE_APP_ID,
+  measurementId: process.env.NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID,
 };
 
-/**
- * Exact NEXT_PUBLIC_* env var names that are mandatory for Firebase Auth.
- * This is the single source of truth for both the config check below and the
- * "Firebase setup required" helper in AuthModal, so the names displayed to the
- * user can never drift from what lib/firebase.ts actually reads.
- */
-const REQUIRED_ENV_VARS = [
-  "NEXT_PUBLIC_FIREBASE_API_KEY",
-  "NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN",
-  "NEXT_PUBLIC_FIREBASE_PROJECT_ID",
-  "NEXT_PUBLIC_FIREBASE_APP_ID",
-];
-
-/** Exact env var names that are currently missing/empty. */
-export const missingFirebaseKeys = REQUIRED_ENV_VARS.filter(
-  (name) => !process.env[name]?.trim()
-);
-
-/** True only when all mandatory public config is present. */
-export const isFirebaseConfigured = missingFirebaseKeys.length === 0;
-
-if (!isFirebaseConfigured && process.env.NODE_ENV !== "production") {
-  // Dev-only hint so the issue is obvious without crashing.
-  console.warn(
-    "[firebase] Missing config keys:",
-    missingFirebaseKeys.join(", "),
-    "\nCreate a .env.local file with your Firebase Web credentials.",
-  );
-}
-
-// Only initialize Firebase when the mandatory public config is present.
-// If the NEXT_PUBLIC_FIREBASE_* env vars are missing/empty (e.g. on a build
-// machine that hasn't set them yet), we skip initialization entirely so the
-// import never throws `auth/invalid-api-key` during `next build` prerender.
-// The UI (`AuthModal` config helper) degrades gracefully when unconfigured.
+// Initialize exactly once (guarded for HMR / repeated imports).
+// Wrapped so a missing or invalid config logs an error instead of crashing
+// the app at import time — auth calls will then fail with a clear message.
 let app: ReturnType<typeof initializeApp> | null = null;
 let auth: ReturnType<typeof getAuth> | null = null;
-let googleProvider: GoogleAuthProvider | null = null;
 let db: ReturnType<typeof getFirestore> | null = null;
+let googleProvider: GoogleAuthProvider | null = null;
 
-if (isFirebaseConfigured) {
+try {
   app = getApps().length ? getApp() : initializeApp(firebaseConfig);
   auth = getAuth(app);
   db = getFirestore(app);
   googleProvider = new GoogleAuthProvider();
   googleProvider.setCustomParameters({ prompt: "select_account" });
+} catch (err) {
+  console.error("[firebase] initialization failed:", err);
 }
 
-export { app, auth, googleProvider, db };
+export { app, auth, db, googleProvider };
 
 /* ------------------------------------------------------------------ */
 /* Reusable auth helpers                                               */
@@ -81,7 +51,7 @@ export { app, auth, googleProvider, db };
 
 export async function signInWithGoogle(): Promise<User> {
   if (!auth || !googleProvider) {
-    throw new Error("Firebase is not configured. Add your NEXT_PUBLIC_FIREBASE_* env vars.");
+    throw new Error("Firebase is not configured. Check your NEXT_PUBLIC_FIREBASE_* env vars.");
   }
   const result = await signInWithPopup(auth, googleProvider);
   return result.user;
