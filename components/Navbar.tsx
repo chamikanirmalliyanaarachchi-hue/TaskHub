@@ -279,19 +279,19 @@ export function Navbar() {
                   )}
                 </AnimatePresence>
               </div>
-            ) : (
+            )             : (
               <>
                 <button
                   onClick={() => openAuth("login")}
                   className="hidden rounded-full border border-slate-200 px-4 py-2 text-sm font-medium text-slate-700 transition-colors hover:bg-slate-50 sm:inline-flex"
                 >
-                  Sign In
+                  Log In
                 </button>
                 <button
                   onClick={() => openAuth("signup")}
                   className="rounded-full bg-gradient-to-r from-primary to-accent px-5 py-2 text-sm font-semibold text-white shadow-lg shadow-primary/30 transition-transform hover:-translate-y-0.5"
                 >
-                  Get Started
+                  Sign Up
                 </button>
               </>
             )}
@@ -363,7 +363,7 @@ export function Navbar() {
                       }}
                       className="w-full rounded-full border border-slate-200 px-6 py-3 text-sm font-medium text-slate-700 hover:bg-slate-50"
                     >
-                      Sign In
+                      Log In
                     </button>
                     <MagnetButton
                       onClick={() => {
@@ -372,7 +372,7 @@ export function Navbar() {
                       }}
                       className="w-full rounded-full bg-gradient-to-r from-primary to-accent px-6 py-3 text-sm font-semibold text-white shadow-lg shadow-primary/30"
                     >
-                      <Zap className="h-4 w-4" /> Get Started
+                      <Zap className="h-4 w-4" /> Sign Up
                     </MagnetButton>
                   </li>
                 )}
