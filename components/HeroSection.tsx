@@ -69,6 +69,16 @@ export function HeroSection() {
 
   return (
     <section className="relative px-4 pb-14 pt-32 text-center sm:pb-16 sm:pt-40">
+      <motion.span
+        initial={{ opacity: 0, y: -6 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5 }}
+        className="mx-auto mb-6 flex w-fit items-center gap-2 rounded-full border border-white/50 bg-white/40 px-3 py-1 text-[11px] font-medium uppercase tracking-[0.16em] text-slate-500 backdrop-blur"
+      >
+        <span className="h-1.5 w-1.5 rounded-full bg-primary/70" />
+        Design &amp; Dev Demo Project
+      </motion.span>
+
       <motion.div
         variants={container}
         initial="hidden"

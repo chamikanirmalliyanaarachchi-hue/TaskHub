@@ -31,6 +31,7 @@ import { TaskerHeroForm } from "@/components/TaskerHeroForm";
 import { AuthModal } from "@/components/AuthModal";
 import { PremiumTaskerIllustration } from "@/components/PremiumTaskerIllustration";
 import { useAuth } from "@/lib/useAuth";
+import { AboutProjectNote } from "@/components/AboutProjectNote";
 
 /**
  * Become a Tasker — expanded, Awwwards-grade marketing + onboarding page.
@@ -329,6 +330,10 @@ export default function BecomeATaskerPage() {
                 </ul>
               </div>
             ))}
+          </div>
+
+          <div className="mt-10">
+            <AboutProjectNote />
           </div>
 
           <div className="mt-12 flex flex-col items-center justify-between gap-4 border-t border-slate-100 pt-6 text-sm text-slate-400 sm:flex-row">

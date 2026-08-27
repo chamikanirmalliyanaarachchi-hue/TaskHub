@@ -25,7 +25,9 @@ import { QuickSearchDrawer } from "@/components/QuickSearchDrawer";
 import { BookingModal } from "@/components/BookingModal";
 import { LiveActivityToast } from "@/components/LiveActivityToast";
 import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
 import { SectionHeading } from "@/components/SectionHeading";
+import { AboutProjectNote } from "@/components/AboutProjectNote";
 
 const reveal = {
   hidden: { opacity: 0, y: 28 },
@@ -198,6 +200,21 @@ export default function Home() {
 
       {/* Become a Tasker CTA — stable container, flowing pastel gradient */}
       <EarnWithTaskHubStable />
+
+      {/* About this project */}
+      <section className="mx-auto max-w-7xl scroll-mt-24 px-4 py-20 sm:px-6">
+        <div className="rounded-3xl border border-slate-100 bg-white p-8 shadow-[0_12px_40px_rgba(15,23,42,0.06)] sm:p-10">
+          <Badge variant="glow" className="mb-3">
+            <Sparkles className="h-3.5 w-3.5" /> About this project
+          </Badge>
+          <h2 className="font-display text-2xl font-bold text-foreground sm:text-3xl">
+            A portfolio demo, not a real product
+          </h2>
+          <div className="mt-4">
+            <AboutProjectNote />
+          </div>
+        </div>
+      </section>
 
       {/* Footer */}
       <footer className="border-t border-slate-200 bg-white">

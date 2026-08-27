@@ -28,6 +28,7 @@ import { useToast } from "@/lib/useToast";
 import { fireConfetti } from "@/lib/confetti";
 import { Toaster } from "@/components/Toaster";
 import { AuthModal } from "@/components/AuthModal";
+import { AboutProjectNote } from "@/components/AboutProjectNote";
 
 const PRIORITY_RANK: Record<Priority, number> = { high: 0, medium: 1, low: 2 };
 
@@ -630,6 +631,12 @@ export function TaskManager() {
           </section>
         </div>
       </main>
+
+      <footer className="border-t border-slate-200 bg-white">
+        <div className="mx-auto max-w-5xl px-4 py-10">
+          <AboutProjectNote />
+        </div>
+      </footer>
 
       <Toaster />
       <AuthModal

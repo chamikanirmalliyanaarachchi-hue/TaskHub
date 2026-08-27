@@ -80,6 +80,54 @@ export function ProductPreview() {
     setDone(false);
   };
 
+  const [loading, setLoading] = React.useState(true);
+  React.useEffect(() => {
+    const t = setTimeout(() => setLoading(false), 450);
+    return () => clearTimeout(t);
+  }, []);
+
+  if (loading) {
+    return (
+      <section className="relative mx-auto max-w-7xl px-4 py-10 sm:px-6">
+        <div className="grid items-center gap-6 lg:grid-cols-12">
+          <div className="lg:col-span-7">
+            <div className="rounded-3xl border border-white/50 bg-white/70 p-7 shadow-glass-lg backdrop-blur-xl">
+              <div className="h-4 w-28 rounded bg-slate-100 animate-pulse" />
+              <div className="mt-4 h-12 w-full rounded-2xl bg-slate-100 animate-pulse" />
+              <div className="mt-5 space-y-2.5">
+                {[0, 1, 2].map((i) => (
+                  <div key={i} className="flex items-center gap-3">
+                    <div className="h-6 w-6 rounded-full bg-slate-100 animate-pulse" />
+                    <div className="h-3 w-44 rounded bg-slate-100 animate-pulse" />
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+          <div className="lg:col-span-5">
+            <div className="rounded-3xl border border-white/50 bg-white/80 p-6 shadow-glass-lg backdrop-blur-xl">
+              <div className="h-4 w-24 rounded bg-slate-100 animate-pulse" />
+              <div className="mt-4 space-y-3">
+                {[0, 1].map((i) => (
+                  <div
+                    key={i}
+                    className="flex items-center gap-3 rounded-2xl border border-slate-100 bg-white p-3"
+                  >
+                    <div className="h-11 w-11 rounded-full bg-slate-100 animate-pulse" />
+                    <div className="flex-1 space-y-2">
+                      <div className="h-3 w-24 rounded bg-slate-100 animate-pulse" />
+                      <div className="h-2.5 w-32 rounded bg-slate-100 animate-pulse" />
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    );
+  }
+
   return (
     <section className="relative mx-auto max-w-7xl px-4 py-10 sm:px-6">
       <div className="grid items-center gap-6 lg:grid-cols-12">

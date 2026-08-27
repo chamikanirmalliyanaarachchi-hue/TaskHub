@@ -26,3 +26,24 @@ Retrying 1/3...
 <w> [webpack.cache.PackFileCacheStrategy] Caching failed for pack: Error: Unable to snapshot resolve dependencies
 <w> [webpack.cache.PackFileCacheStrategy] Caching failed for pack: Error: Unable to snapshot resolve dependencies
 <w> [webpack.cache.PackFileCacheStrategy] Caching failed for pack: Error: Unable to snapshot resolve dependencies
+<w> [webpack.cache.PackFileCacheStrategy] Caching failed for pack: Error: Unable to snapshot resolve dependencies
+ ⨯ ./components/FeaturedTaskers.tsx
+Error: 
+  [31mx[0m Unexpected token `section`. Expected jsx identifier
+    ,-[[36;1;4mF:\New folder\taskhub-2-0\components\FeaturedTaskers.tsx[0m:37:1]
+ [2m37[0m |   }, []);
+ [2m38[0m | 
+ [2m39[0m |   return (
+ [2m40[0m |     <section id="taskers" className="mx-auto max-w-7xl scroll-mt-24 px-4 py-20 sm:px-6">
+    : [31;1m     ^^^^^^^[0m
+ [2m41[0m |       <motion.div
+ [2m42[0m |         variants={reveal}
+ [2m43[0m |         initial="hidden"
+    `----
+
+Caused by:
+    Syntax Error
+
+Import trace for requested module:
+./components/FeaturedTaskers.tsx
+./app/page.tsx

@@ -30,6 +30,12 @@ const reveal = {
 };
 
 export function FeaturedTaskers() {
+  const [loading, setLoading] = React.useState(true);
+  React.useEffect(() => {
+    const t = setTimeout(() => setLoading(false), 700);
+    return () => clearTimeout(t);
+  }, []);
+
   return (
     <section id="taskers" className="mx-auto max-w-7xl scroll-mt-24 px-4 py-20 sm:px-6">
       <motion.div
@@ -52,7 +58,32 @@ export function FeaturedTaskers() {
         </p>
       </motion.div>
 
-      <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
+      {loading ? (
+        <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
+          {Array.from({ length: 4 }).map((_, i) => (
+            <div
+              key={i}
+              className="rounded-3xl border border-slate-100 bg-white p-5 shadow-[0_8px_30px_rgba(15,23,42,0.06)]"
+            >
+              <div className="flex items-center gap-3">
+                <div className="h-12 w-12 rounded-full bg-slate-100 animate-pulse" />
+                <div className="space-y-2">
+                  <div className="h-3 w-24 rounded bg-slate-100 animate-pulse" />
+                  <div className="h-2.5 w-16 rounded bg-slate-100 animate-pulse" />
+                </div>
+              </div>
+              <div className="mt-4 h-3 w-20 rounded bg-slate-100 animate-pulse" />
+              <div className="mt-2 h-2.5 w-28 rounded bg-slate-100 animate-pulse" />
+              <div className="mt-4 flex items-center justify-between border-t border-slate-100 pt-4">
+                <div className="h-5 w-12 rounded bg-slate-100 animate-pulse" />
+                <div className="h-5 w-16 rounded-full bg-slate-100 animate-pulse" />
+              </div>
+              <div className="mt-4 h-9 w-full rounded-full bg-slate-100 animate-pulse" />
+            </div>
+          ))}
+        </div>
+      ) : (
+        <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
         {TASKERS.map((t, i) => (
           <motion.article
             key={t.name}
@@ -128,6 +159,8 @@ export function FeaturedTaskers() {
           </motion.article>
         ))}
       </div>
+      )}
+
     </section>
   );
 }
