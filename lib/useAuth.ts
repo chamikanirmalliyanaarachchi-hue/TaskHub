@@ -37,7 +37,7 @@ export const useAuth = create<AuthState>((set) => ({
 }));
 
 // Subscribe to Firebase auth changes (client only) to keep the store in sync.
-if (typeof window !== "undefined") {
+if (typeof window !== "undefined" && auth) {
   onAuthStateChanged(auth, (fbUser: User | null) => {
     if (fbUser) {
       useAuth.setState({

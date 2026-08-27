@@ -8,6 +8,7 @@ import {
   signOut,
   type User,
 } from "firebase/auth";
+import { getFirestore } from "firebase/firestore";
 
 /**
  * Firebase web config read from NEXT_PUBLIC_* env vars (client-safe).
@@ -47,36 +48,51 @@ if (!isFirebaseConfigured && process.env.NODE_ENV !== "production") {
   );
 }
 
-// Guard against duplicate initialization during hot reload.
-// initializeApp tolerates empty values; auth simply won't work until the
-// env vars are provided — the UI shows a setup helper instead of crashing.
-const app = getApps().length ? getApp() : initializeApp(firebaseConfig);
-const auth = getAuth(app);
+// Only initialize Firebase when the mandatory public config is present.
+// If the NEXT_PUBLIC_FIREBASE_* env vars are missing/empty (e.g. on a build
+// machine that hasn't set them yet), we skip initialization entirely so the
+// import never throws `auth/invalid-api-key` during `next build` prerender.
+// The UI (`AuthModal` config helper) degrades gracefully when unconfigured.
+let app: ReturnType<typeof initializeApp> | null = null;
+let auth: ReturnType<typeof getAuth> | null = null;
+let googleProvider: GoogleAuthProvider | null = null;
+let db: ReturnType<typeof getFirestore> | null = null;
 
-const googleProvider = new GoogleAuthProvider();
-googleProvider.setCustomParameters({ prompt: "select_account" });
+if (isFirebaseConfigured) {
+  app = getApps().length ? getApp() : initializeApp(firebaseConfig);
+  auth = getAuth(app);
+  db = getFirestore(app);
+  googleProvider = new GoogleAuthProvider();
+  googleProvider.setCustomParameters({ prompt: "select_account" });
+}
 
-export { app, auth, googleProvider };
+export { app, auth, googleProvider, db };
 
 /* ------------------------------------------------------------------ */
 /* Reusable auth helpers                                               */
 /* ------------------------------------------------------------------ */
 
 export async function signInWithGoogle(): Promise<User> {
+  if (!auth || !googleProvider) {
+    throw new Error("Firebase is not configured. Add your NEXT_PUBLIC_FIREBASE_* env vars.");
+  }
   const result = await signInWithPopup(auth, googleProvider);
   return result.user;
 }
 
 export async function signInWithEmail(email: string, password: string): Promise<User> {
+  if (!auth) throw new Error("Firebase is not configured.");
   const result = await signInWithEmailAndPassword(auth, email, password);
   return result.user;
 }
 
 export async function signUpWithEmail(email: string, password: string): Promise<User> {
+  if (!auth) throw new Error("Firebase is not configured.");
   const result = await createUserWithEmailAndPassword(auth, email, password);
   return result.user;
 }
 
 export async function logOut(): Promise<void> {
+  if (!auth) return;
   await signOut(auth);
 }
