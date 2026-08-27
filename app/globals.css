@@ -1,0 +1,158 @@
+/* ===========================================================================
+   TaskHub 2.0 — Global Stylesheet
+   ---------------------------------------------------------------------------
+   This file defines:
+   1. The semantic CSS variables that power the Light / Dark themes.
+   2. Base resets and typography.
+   3. Reusable component utilities (glassmorphism, gradients, glow).
+   Tailwind reads these variables via tailwind.config.js tokens.
+   =========================================================================== */
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ---------------------------------------------------------------------------
+   1. THEME TOKENS
+   Values are stored as raw HSL channels (e.g. "262 83% 58%") so Tailwind can
+   wrap them with hsl(...) and apply opacity modifiers like hsl(var(--primary)/0.5).
+--------------------------------------------------------------------------- */
+@layer base {
+  :root {
+    /* Light theme */
+    --background: 0 0% 100%;
+    --foreground: 222 47% 11%;
+
+    --card: 0 0% 100%;
+    --card-foreground: 222 47% 11%;
+
+    --primary: 262 83% 58%;
+    --primary-foreground: 0 0% 100%;
+
+    --secondary: 210 40% 96%;
+    --secondary-foreground: 222 47% 11%;
+
+    --muted: 210 40% 96%;
+    --muted-foreground: 215 16% 47%;
+
+    --accent: 199 89% 48%;
+    --accent-foreground: 0 0% 100%;
+
+    --border: 214 32% 91%;
+    --input: 214 32% 91%;
+    --ring: 262 83% 58%;
+
+    --radius: 1rem;
+
+    /* Mesh gradient blob hues */
+    --mesh-1: 262 83% 62%;
+    --mesh-2: 199 89% 55%;
+    --mesh-3: 330 81% 62%;
+    --mesh-4: 160 84% 45%;
+  }
+
+  .dark {
+    /* Dark theme */
+    --background: 222 47% 7%;
+    --foreground: 210 40% 98%;
+
+    --card: 222 47% 10%;
+    --card-foreground: 210 40% 98%;
+
+    --primary: 262 83% 66%;
+    --primary-foreground: 222 47% 7%;
+
+    --secondary: 217 33% 18%;
+    --secondary-foreground: 210 40% 98%;
+
+    --muted: 217 33% 18%;
+    --muted-foreground: 215 20% 65%;
+
+    --accent: 199 89% 55%;
+    --accent-foreground: 222 47% 7%;
+
+    --border: 217 33% 22%;
+    --input: 217 33% 22%;
+    --ring: 262 83% 66%;
+
+    --mesh-1: 262 83% 45%;
+    --mesh-2: 199 89% 42%;
+    --mesh-3: 330 81% 45%;
+    --mesh-4: 160 84% 36%;
+  }
+
+  * {
+    @apply border-border;
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    @apply bg-background text-foreground font-sans antialiased;
+    /* Subtle noise-less vignette to add depth behind glass surfaces */
+    background-image: radial-gradient(
+      circle at 50% 0%,
+      hsl(var(--primary) / 0.08),
+      transparent 60%
+    );
+  }
+}
+
+/* ---------------------------------------------------------------------------
+   2. COMPONENT UTILITIES
+--------------------------------------------------------------------------- */
+@layer components {
+  /* Standard frosted-glass surface */
+  .glass {
+    @apply bg-white/60 dark:bg-white/[0.06] backdrop-blur-xl
+           border border-white/40 dark:border-white/10
+           shadow-[0_8px_32px_rgba(0,0,0,0.12)];
+  }
+
+  /* Stronger glass for floating headers / modals */
+  .glass-strong {
+    @apply bg-white/80 dark:bg-white/[0.08] backdrop-blur-2xl
+           border border-white/50 dark:border-white/15
+           shadow-[0_12px_48px_rgba(0,0,0,0.18)];
+  }
+
+  /* Animated gradient text (shimmering pan) */
+  .text-gradient {
+    @apply bg-clip-text text-transparent
+           bg-gradient-to-r from-primary via-accent to-primary
+           bg-[length:200%_auto] animate-gradient;
+  }
+
+  /* Soft colored glow wrapper */
+  .glow {
+    box-shadow: 0 0 45px -12px hsl(var(--primary) / 0.65);
+  }
+
+  .glow-accent {
+    box-shadow: 0 0 45px -12px hsl(var(--accent) / 0.65);
+  }
+}
+
+/* ---------------------------------------------------------------------------
+   3. HELPER UTILITIES (non-Tailwind)
+--------------------------------------------------------------------------- */
+@layer utilities {
+  /* Hide scrollbar but keep scroll (used in horizontal category bar) */
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+  .no-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+
+  /* 3D perspective helper for tilt cards */
+  .perspective {
+    perspective: 1000px;
+  }
+  .preserve-3d {
+    transform-style: preserve-3d;
+  }
+}
