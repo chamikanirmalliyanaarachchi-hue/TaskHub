@@ -301,7 +301,7 @@ function ConfigHelper({ missing }: { missing: string[] }) {
           <ul className="mt-2 list-inside list-disc text-sm">
             {missing.map((k) => (
               <li key={k} className="font-mono text-xs">
-                NEXT_PUBLIC_FIREBASE_{k.toUpperCase()}
+                {k}
               </li>
             ))}
           </ul>

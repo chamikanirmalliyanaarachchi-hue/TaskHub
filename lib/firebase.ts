@@ -16,25 +16,32 @@ import { getFirestore } from "firebase/firestore";
  * Firebase Console → Project settings → Your apps (Web).
  */
 const firebaseConfig: FirebaseOptions = {
-  apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY,
-  authDomain: process.env.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN,
-  projectId: process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID,
-  storageBucket: process.env.NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET,
-  messagingSenderId: process.env.NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID,
-  appId: process.env.NEXT_PUBLIC_FIREBASE_APP_ID,
-  measurementId: process.env.NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID,
+  apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY?.trim() || undefined,
+  authDomain: process.env.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN?.trim() || undefined,
+  projectId: process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID?.trim() || undefined,
+  storageBucket: process.env.NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET?.trim() || undefined,
+  messagingSenderId: process.env.NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID?.trim() || undefined,
+  appId: process.env.NEXT_PUBLIC_FIREBASE_APP_ID?.trim() || undefined,
+  measurementId: process.env.NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID?.trim() || undefined,
 };
 
-/** Keys that are mandatory for Firebase Auth to function. */
-const REQUIRED_KEYS: (keyof FirebaseOptions)[] = [
-  "apiKey",
-  "authDomain",
-  "projectId",
-  "appId",
+/**
+ * Exact NEXT_PUBLIC_* env var names that are mandatory for Firebase Auth.
+ * This is the single source of truth for both the config check below and the
+ * "Firebase setup required" helper in AuthModal, so the names displayed to the
+ * user can never drift from what lib/firebase.ts actually reads.
+ */
+const REQUIRED_ENV_VARS = [
+  "NEXT_PUBLIC_FIREBASE_API_KEY",
+  "NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN",
+  "NEXT_PUBLIC_FIREBASE_PROJECT_ID",
+  "NEXT_PUBLIC_FIREBASE_APP_ID",
 ];
 
-/** Which required keys are currently missing (empty/undefined). */
-export const missingFirebaseKeys = REQUIRED_KEYS.filter((k) => !firebaseConfig[k]);
+/** Exact env var names that are currently missing/empty. */
+export const missingFirebaseKeys = REQUIRED_ENV_VARS.filter(
+  (name) => !process.env[name]?.trim()
+);
 
 /** True only when all mandatory public config is present. */
 export const isFirebaseConfigured = missingFirebaseKeys.length === 0;
